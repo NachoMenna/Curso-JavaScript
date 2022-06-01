@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>JS Drum Kit</title>
   <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
 
@@ -57,10 +59,27 @@
   <audio data-key="75" src="sounds/tom.wav"></audio>
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
-<script>
+  <script>    
+    function playSound(e) {
+      const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`); // Creamos la variable con cada uno de los audios segun su número clave.
+      const key = document.querySelector(`.key[data-key="${e.keyCode}"]`); // Creamos la variable con cada uno de los divs según su número clave.
+      if (!audio) return; // Si no hay audio, no hace nada.
+      audio.currentTime = 0; // Hace que el audio comience de 0, y de este modo no es necesario que llegue al final para volver a reproducir.
+      audio.play(); //Esta funcion hace que el audio se reproduzca
+      key.classList.add('playing'); // Añadimos la "clase" de CSS playing.
+    };
 
-</script>
+    function removeTransition(e) {
+      if (e.propertyName !== 'transform') return; // Saltar la funcion removeTransition si el evento no sufrió cambios.
+      this.classList.remove('playing'); // Removemos la "clase" de CSS playing.
+    }
+
+    const keys = document.querySelectorAll('.key'); // Creamos la variable con un array de todos los divs.
+    keys.forEach(key => key.addEventListener('transitionend', removeTransition)) // Iteramos dentro del array, agregamos un evento y le pasamos 2 parametros.
+    window.addEventListener('keydown', playSound); // Agregamos un evento a la ventana y le pasamos 2 parametros.
+  </script>
 
 
 </body>
+
 </html>
